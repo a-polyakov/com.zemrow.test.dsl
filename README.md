@@ -1,4 +1,4 @@
-##Пробуем DSL для работы с SQL
+## Пробуем DSL для работы с SQL
 DSL (Domain-specific language) - Предметно-ориентированный язык. Запрос к базе можно стоить вызовом функций, например 
 > select(person.name).from(person).where(person.id.eq(10)).orderBy(person.lastName.asc())
 
