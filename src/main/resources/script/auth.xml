@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="201703091200" author="polyakov" logicalFilePath="no_path">
+        <comment>
+            Ограничение id для liquibase, только 8 чифр - дата в формате yyyyMMddhhmm
+        </comment>
+        <addPrimaryKey tableName="databasechangelog" columnNames="id"/>
+        <addUniqueConstraint tableName="databasechangelog" columnNames="orderexecuted"/>
+        <!--TODO mysql игнорит CHECK, инструкция работает только для postgres-->
+        <!--<sql>-->
+        <!--ALTER TABLE public.databasechangelog ADD CHECK (id ~* '^201[7-9][0-1][0-9][0-3][0-9][0-2][0-9][0-5][0-9]$')-->
+        <!--</sql>-->
+    </changeSet>
+
+    <changeSet id="201703091201" author="polyakov" logicalFilePath="no_path">
+        <comment>
+            Инициализации схемы БД
+        </comment>
+        <createTable schemaName="auth" tableName="auth_user" remarks="Пользователь">
+            <column name="id" type="UUID" remarks="ID записи">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="label" type="VARCHAR(255)" remarks="Состояние пользователя: Не в сети, В сети, Не беспокоить">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_time" type="BIGINT"
+                    remarks="Дата создания записи">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="UUID" remarks="Пользователь создавший запись">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_time" type="BIGINT" remarks="Дата обновления записи">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by" type="UUID" remarks="Пользователь обновивший запись">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delete_time" type="BIGINT" remarks="Дата удаления записи">
+                <constraints nullable="true"/>
+            </column>
+            <column name="deleted_by" type="UUID" remarks="Пользователь удаливший запись">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <!--TODO label UNIQUE WITH delete_time is null-->
+
+        <createTable schemaName="auth" tableName="auth_entry_point" remarks="Способы авторизации пользователя">
+            <column name="id" type="UUID" remarks="ID записи">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="auth_user_id" type="UUID" remarks="ID пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entry_point_type" type="VARCHAR(255)"
+                    remarks="Способ(система) авторизации: логин_пароль, vk.com, google, ...">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_id" type="VARCHAR(255)" remarks="Идентификатор в системе авторизации (логин)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="credential" type="VARCHAR(255)"
+                    remarks="Удостоверение личности в системе авторизации (пароль)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="validate" type="BOOLEAN" remarks="Прошел ли подтверждени">
+                <constraints nullable="true"/>
+            </column>
+            <column name="create_time" type="BIGINT" remarks="Дата создания записи">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="UUID" remarks="Пользователь создавший запись">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_time" type="BIGINT" remarks="Дата обновления записи">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by" type="UUID" remarks="Пользователь обновивший запись">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delete_time" type="BIGINT" remarks="Дата удаления записи">
+                <constraints nullable="true"/>
+            </column>
+            <column name="deleted_by" type="UUID" remarks="Пользователь удаливший запись">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createTable schemaName="auth" tableName="auth_session" remarks="Сессия пользователя">
+            <column name="id" type="UUID" remarks="ID записи">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="auth_entry_point_id" type="UUID" remarks="Точка входа пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="VARCHAR(255)" remarks="Уникальный идентификатор сессии, сложный для подбора">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_time" type="BIGINT" remarks="Дата создания записи">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delete_time" type="BIGINT" remarks="Дата удаления записи">
+                <constraints nullable="true"/>
+            </column>
+            <column name="deleted_by" type="UUID" remarks="Пользователь удаливший запись">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createTable schemaName="auth" tableName="auth_session_fail" remarks="Неудачные попытки войти в систему">
+            <column name="id" type="UUID" remarks="ID записи">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="auth_entry_point_id" type="UUID" remarks="Точка входа пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip_address" type="VARCHAR(255)" remarks="IP адрес клиента">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="TEXT" remarks="Сообщение об ошибке">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_time" type="BIGINT" remarks="Дата создания записи">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable schemaName="log" tableName="rout_log" remarks="Логи вызовов сервисов">
+            <column name="id" type="UUID" remarks="ID записи">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="token" type="VARCHAR(255)" remarks="Уникальный идентификатор сессии пользователя">
+                <constraints nullable="true"/>
+            </column>
+            <column name="service_id" type="VARCHAR(255)" remarks="Идентификатор сервиса">
+                <constraints nullable="true"/>
+            </column>
+            <column name="action" type="VARCHAR(255)" remarks="Имя метода">
+                <constraints nullable="true"/>
+            </column>
+            <column name="start_invoke" type="BIGINT" remarks="Время запуска">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_invoke" type="BIGINT" remarks="Время окончания">
+                <constraints nullable="true"/>
+            </column>
+            <column name="error_stack_trace" type="text" remarks="Ошибка если была (stacktrace)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="auth_user__created_by__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_user" baseColumnNames="created_by"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="auth_user__updated_by__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_user" baseColumnNames="updated_by"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="auth_user__deleted_by__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_user" baseColumnNames="deleted_by"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_user"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint constraintName="auth_entry_point__auth_user_id__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_entry_point"
+                                 baseColumnNames="auth_user_id"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="auth_entry_point__created_by__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_entry_point"
+                                 baseColumnNames="created_by"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="auth_entry_point__updated_by__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_entry_point"
+                                 baseColumnNames="updated_by"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="auth_entry_point__deleted_by__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_entry_point"
+                                 baseColumnNames="deleted_by"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_user"
+                                 referencedColumnNames="id"/>
+        <addUniqueConstraint schemaName="auth" tableName="auth_entry_point" columnNames="entry_point_type, client_id"/>
+
+        <addForeignKeyConstraint constraintName="auth_session__auth_entry_point_id__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_session"
+                                 baseColumnNames="auth_entry_point_id"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_entry_point"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="auth_session__deleted_by__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_session" baseColumnNames="deleted_by"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_user"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint constraintName="auth_session_fail__auth_entry_point_id__fk"
+                                 baseTableSchemaName="auth" baseTableName="auth_session_fail"
+                                 baseColumnNames="auth_entry_point_id"
+                                 referencedTableSchemaName="auth" referencedTableName="auth_entry_point"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+</databaseChangeLog>
