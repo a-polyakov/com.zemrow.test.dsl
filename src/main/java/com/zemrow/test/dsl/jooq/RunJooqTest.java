@@ -1,7 +1,6 @@
 package com.zemrow.test.dsl.jooq;
 
 import com.zemrow.test.dsl.DBConst;
-import com.zemrow.test.dsl.jooq.autogen.Tables;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
@@ -9,6 +8,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.UUID;
+
+import static com.zemrow.test.dsl.jooq.autogen.auth.SchemaAuthConst.AUTH;
 
 /**
  * Created on 21.12.2016.
@@ -31,11 +32,12 @@ public class RunJooqTest {
                 timeEngineStart += time;
                 System.out.println("Время запуска engine " + time + "ms");
                 time = System.currentTimeMillis();
-                final SelectSeekStep2<Record2<UUID, UUID>, UUID, UUID> query = dsl.select(Tables.AUTH_USER.ID, Tables.AUTH_SESSION.ID)
-                        .from(Tables.AUTH_USER)
-                        .join(Tables.AUTH_ENTRY_POINT).on(Tables.AUTH_ENTRY_POINT.AUTH_USER_ID.eq(Tables.AUTH_USER.ID))
-                        .join(Tables.AUTH_SESSION).on(Tables.AUTH_SESSION.AUTH_ENTRY_POINT_ID.eq(Tables.AUTH_ENTRY_POINT.ID))
-                        .orderBy(Tables.AUTH_USER.ID.asc(), Tables.AUTH_SESSION.ID.asc());
+
+                final SelectSeekStep2<Record2<UUID, UUID>, UUID, UUID> query = dsl.select(AUTH.AUTH_USER.ID, AUTH.AUTH_SESSION.ID)
+                        .from(AUTH.AUTH_USER)
+                        .join(AUTH.AUTH_ENTRY_POINT).on(AUTH.AUTH_ENTRY_POINT.AUTH_USER_ID.eq(AUTH.AUTH_USER.ID))
+                        .join(AUTH.AUTH_SESSION).on(AUTH.AUTH_SESSION.AUTH_ENTRY_POINT_ID.eq(AUTH.AUTH_ENTRY_POINT.ID))
+                        .orderBy(AUTH.AUTH_USER.ID.asc(), AUTH.AUTH_SESSION.ID.asc());
                 time = System.currentTimeMillis() - time;
                 timeQueryBuild += time;
                 System.out.println(query.toString());
