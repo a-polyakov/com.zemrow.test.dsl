@@ -77,22 +77,7 @@ public class RunJooqGenerateConst {
             database.setConfiguredCustomTypes(Collections.EMPTY_LIST);
             database.setConfiguredEnumTypes(Collections.EMPTY_LIST);
 
-            final JavaGenerator generator = new JavaGenerator() {
-                @Override
-                protected void generateTableReferences(SchemaDefinition schema) {
-                    // не генерировать отдельный класс Tables
-                }
-
-                @Override
-                public boolean generateRelations() {
-                    return false; // не генерировать отдельный класс Keys
-                }
-
-//                @Override
-//                protected void generateRelations(SchemaDefinition schema) {
-//                     не генерировать отдельный класс Keys
-//                }
-            };
+            final JavaGenerator generator = new CustomJavaGenerator();
             generator.setStrategy(strategy);
             generator.setGenerateGeneratedAnnotation(false); // удалить из сгенерированого кода аннотацию javax.annotation.Generated
             generator.setGenerateEmptyCatalogs(false);
@@ -113,4 +98,5 @@ public class RunJooqGenerateConst {
             generator.generate(database);
         }
     }
+
 }

@@ -4,6 +4,8 @@
 package com.zemrow.test.dsl.jooq.autogen.auth.dao.entity;
 
 
+import com.zemrow.test.dsl.jooq.impl.AbstractEntity;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -11,22 +13,32 @@ import java.util.UUID;
 /**
  * Неудачные попытки войти в систему
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes"})
-public class AuthSessionFailEntity implements Serializable {
+public class AuthSessionFailEntity extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 1876681733;
+    private static final long serialVersionUID = 411392380;
 
-    private UUID id;
+    /**
+     * Точка входа пользователя
+     */
     private UUID authEntryPointId;
+    /**
+     * IP адрес клиента
+     */
     private String ipAddress;
+    /**
+     * Сообщение об ошибке
+     */
     private String comment;
+    /**
+     * Дата создания записи
+     */
     private Long createTime;
 
     public AuthSessionFailEntity() {
     }
 
     public AuthSessionFailEntity(AuthSessionFailEntity value) {
-        this.id = value.id;
+        super(value);
         this.authEntryPointId = value.authEntryPointId;
         this.ipAddress = value.ipAddress;
         this.comment = value.comment;
@@ -40,19 +52,11 @@ public class AuthSessionFailEntity implements Serializable {
             String comment,
             Long createTime
     ) {
-        this.id = id;
+        super(id);
         this.authEntryPointId = authEntryPointId;
         this.ipAddress = ipAddress;
         this.comment = comment;
         this.createTime = createTime;
-    }
-
-    public UUID getId() {
-        return this.id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public UUID getAuthEntryPointId() {
@@ -88,65 +92,66 @@ public class AuthSessionFailEntity implements Serializable {
     }
 
     @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AuthSessionFailEntity (");
+
+        sb.append("id:").append(id);
+        sb.append(", authEntryPointId:").append(authEntryPointId);
+        sb.append(", ipAddress:").append(ipAddress);
+        sb.append(", comment:").append(comment);
+        sb.append(", createTime:").append(createTime);
+
+        sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (!(obj instanceof AuthSessionFailEntity)) {
             return false;
+        }
         final AuthSessionFailEntity other = (AuthSessionFailEntity) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
         if (authEntryPointId == null) {
-            if (other.authEntryPointId != null)
+            if (other.authEntryPointId != null) {
                 return false;
-        } else if (!authEntryPointId.equals(other.authEntryPointId))
+            }
+        } else if (!authEntryPointId.equals(other.authEntryPointId)) {
             return false;
+        }
         if (ipAddress == null) {
-            if (other.ipAddress != null)
+            if (other.ipAddress != null) {
                 return false;
-        } else if (!ipAddress.equals(other.ipAddress))
+            }
+        } else if (!ipAddress.equals(other.ipAddress)) {
             return false;
+        }
         if (comment == null) {
-            if (other.comment != null)
+            if (other.comment != null) {
                 return false;
-        } else if (!comment.equals(other.comment))
+            }
+        } else if (!comment.equals(other.comment)) {
             return false;
+        }
         if (createTime == null) {
-            if (other.createTime != null)
+            if (other.createTime != null) {
                 return false;
-        } else if (!createTime.equals(other.createTime))
+            }
+        } else if (!createTime.equals(other.createTime)) {
             return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((authEntryPointId == null) ? 0 : authEntryPointId.hashCode());
-        result = prime * result + ((ipAddress == null) ? 0 : ipAddress.hashCode());
-        result = prime * result + ((comment == null) ? 0 : comment.hashCode());
-        result = prime * result + ((createTime == null) ? 0 : createTime.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + ((authEntryPointId == null) ? 0 : authEntryPointId.hashCode());
+        result = 31 * result + ((ipAddress == null) ? 0 : ipAddress.hashCode());
+        result = 31 * result + ((comment == null) ? 0 : comment.hashCode());
+        result = 31 * result + ((createTime == null) ? 0 : createTime.hashCode());
         return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("AuthSessionFailEntity (");
-
-        sb.append(id);
-        sb.append(", ").append(authEntryPointId);
-        sb.append(", ").append(ipAddress);
-        sb.append(", ").append(comment);
-        sb.append(", ").append(createTime);
-
-        sb.append(")");
-        return sb.toString();
     }
 }

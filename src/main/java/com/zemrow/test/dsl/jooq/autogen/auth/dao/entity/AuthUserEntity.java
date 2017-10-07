@@ -4,6 +4,8 @@
 package com.zemrow.test.dsl.jooq.autogen.auth.dao.entity;
 
 
+import com.zemrow.test.dsl.jooq.impl.AbstractEntity;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -11,25 +13,44 @@ import java.util.UUID;
 /**
  * Пользователь
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes"})
-public class AuthUserEntity implements Serializable {
+public class AuthUserEntity extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = -638655169;
+    private static final long serialVersionUID = -1476540156;
 
-    private UUID id;
+    /**
+     * Состояние пользователя: Не в сети, В сети, Не беспокоить
+     */
     private String label;
+    /**
+     * Дата создания записи
+     */
     private Long createTime;
+    /**
+     * Пользователь создавший запись
+     */
     private UUID createdBy;
+    /**
+     * Дата обновления записи
+     */
     private Long updateTime;
+    /**
+     * Пользователь обновивший запись
+     */
     private UUID updatedBy;
+    /**
+     * Дата удаления записи
+     */
     private Long deleteTime;
+    /**
+     * Пользователь удаливший запись
+     */
     private UUID deletedBy;
 
     public AuthUserEntity() {
     }
 
     public AuthUserEntity(AuthUserEntity value) {
-        this.id = value.id;
+        super(value);
         this.label = value.label;
         this.createTime = value.createTime;
         this.createdBy = value.createdBy;
@@ -49,7 +70,7 @@ public class AuthUserEntity implements Serializable {
             Long deleteTime,
             UUID deletedBy
     ) {
-        this.id = id;
+        super(id);
         this.label = label;
         this.createTime = createTime;
         this.createdBy = createdBy;
@@ -57,14 +78,6 @@ public class AuthUserEntity implements Serializable {
         this.updatedBy = updatedBy;
         this.deleteTime = deleteTime;
         this.deletedBy = deletedBy;
-    }
-
-    public UUID getId() {
-        return this.id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getLabel() {
@@ -124,86 +137,93 @@ public class AuthUserEntity implements Serializable {
     }
 
     @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AuthUserEntity (");
+
+        sb.append("id:").append(id);
+        sb.append(", label:").append(label);
+        sb.append(", createTime:").append(createTime);
+        sb.append(", createdBy:").append(createdBy);
+        sb.append(", updateTime:").append(updateTime);
+        sb.append(", updatedBy:").append(updatedBy);
+        sb.append(", deleteTime:").append(deleteTime);
+        sb.append(", deletedBy:").append(deletedBy);
+
+        sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (!(obj instanceof AuthUserEntity)) {
             return false;
+        }
         final AuthUserEntity other = (AuthUserEntity) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
         if (label == null) {
-            if (other.label != null)
+            if (other.label != null) {
                 return false;
-        } else if (!label.equals(other.label))
+            }
+        } else if (!label.equals(other.label)) {
             return false;
+        }
         if (createTime == null) {
-            if (other.createTime != null)
+            if (other.createTime != null) {
                 return false;
-        } else if (!createTime.equals(other.createTime))
+            }
+        } else if (!createTime.equals(other.createTime)) {
             return false;
+        }
         if (createdBy == null) {
-            if (other.createdBy != null)
+            if (other.createdBy != null) {
                 return false;
-        } else if (!createdBy.equals(other.createdBy))
+            }
+        } else if (!createdBy.equals(other.createdBy)) {
             return false;
+        }
         if (updateTime == null) {
-            if (other.updateTime != null)
+            if (other.updateTime != null) {
                 return false;
-        } else if (!updateTime.equals(other.updateTime))
+            }
+        } else if (!updateTime.equals(other.updateTime)) {
             return false;
+        }
         if (updatedBy == null) {
-            if (other.updatedBy != null)
+            if (other.updatedBy != null) {
                 return false;
-        } else if (!updatedBy.equals(other.updatedBy))
+            }
+        } else if (!updatedBy.equals(other.updatedBy)) {
             return false;
+        }
         if (deleteTime == null) {
-            if (other.deleteTime != null)
+            if (other.deleteTime != null) {
                 return false;
-        } else if (!deleteTime.equals(other.deleteTime))
+            }
+        } else if (!deleteTime.equals(other.deleteTime)) {
             return false;
+        }
         if (deletedBy == null) {
-            if (other.deletedBy != null)
+            if (other.deletedBy != null) {
                 return false;
-        } else if (!deletedBy.equals(other.deletedBy))
+            }
+        } else if (!deletedBy.equals(other.deletedBy)) {
             return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((label == null) ? 0 : label.hashCode());
-        result = prime * result + ((createTime == null) ? 0 : createTime.hashCode());
-        result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
-        result = prime * result + ((updateTime == null) ? 0 : updateTime.hashCode());
-        result = prime * result + ((updatedBy == null) ? 0 : updatedBy.hashCode());
-        result = prime * result + ((deleteTime == null) ? 0 : deleteTime.hashCode());
-        result = prime * result + ((deletedBy == null) ? 0 : deletedBy.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + ((label == null) ? 0 : label.hashCode());
+        result = 31 * result + ((createTime == null) ? 0 : createTime.hashCode());
+        result = 31 * result + ((createdBy == null) ? 0 : createdBy.hashCode());
+        result = 31 * result + ((updateTime == null) ? 0 : updateTime.hashCode());
+        result = 31 * result + ((updatedBy == null) ? 0 : updatedBy.hashCode());
+        result = 31 * result + ((deleteTime == null) ? 0 : deleteTime.hashCode());
+        result = 31 * result + ((deletedBy == null) ? 0 : deletedBy.hashCode());
         return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("AuthUserEntity (");
-
-        sb.append(id);
-        sb.append(", ").append(label);
-        sb.append(", ").append(createTime);
-        sb.append(", ").append(createdBy);
-        sb.append(", ").append(updateTime);
-        sb.append(", ").append(updatedBy);
-        sb.append(", ").append(deleteTime);
-        sb.append(", ").append(deletedBy);
-
-        sb.append(")");
-        return sb.toString();
     }
 }

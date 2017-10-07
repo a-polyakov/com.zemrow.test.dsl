@@ -4,6 +4,8 @@
 package com.zemrow.test.dsl.jooq.autogen.log.dao.entity;
 
 
+import com.zemrow.test.dsl.jooq.impl.AbstractEntity;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -11,24 +13,40 @@ import java.util.UUID;
 /**
  * Логи вызовов сервисов
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes"})
-public class RoutLogEntity implements Serializable {
+public class RoutLogEntity extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = -70578082;
+    private static final long serialVersionUID = -1803295032;
 
-    private UUID id;
+    /**
+     * Уникальный идентификатор сессии пользователя
+     */
     private String token;
+    /**
+     * Идентификатор сервиса
+     */
     private String serviceId;
+    /**
+     * Имя метода
+     */
     private String action;
+    /**
+     * Время запуска
+     */
     private Long startInvoke;
+    /**
+     * Время окончания
+     */
     private Long endInvoke;
+    /**
+     * Ошибка если была (stacktrace)
+     */
     private String errorStackTrace;
 
     public RoutLogEntity() {
     }
 
     public RoutLogEntity(RoutLogEntity value) {
-        this.id = value.id;
+        super(value);
         this.token = value.token;
         this.serviceId = value.serviceId;
         this.action = value.action;
@@ -46,21 +64,13 @@ public class RoutLogEntity implements Serializable {
             Long endInvoke,
             String errorStackTrace
     ) {
-        this.id = id;
+        super(id);
         this.token = token;
         this.serviceId = serviceId;
         this.action = action;
         this.startInvoke = startInvoke;
         this.endInvoke = endInvoke;
         this.errorStackTrace = errorStackTrace;
-    }
-
-    public UUID getId() {
-        return this.id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getToken() {
@@ -112,79 +122,84 @@ public class RoutLogEntity implements Serializable {
     }
 
     @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("RoutLogEntity (");
+
+        sb.append("id:").append(id);
+        sb.append(", token:").append(token);
+        sb.append(", serviceId:").append(serviceId);
+        sb.append(", action:").append(action);
+        sb.append(", startInvoke:").append(startInvoke);
+        sb.append(", endInvoke:").append(endInvoke);
+        sb.append(", errorStackTrace:").append(errorStackTrace);
+
+        sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (!(obj instanceof RoutLogEntity)) {
             return false;
+        }
         final RoutLogEntity other = (RoutLogEntity) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
         if (token == null) {
-            if (other.token != null)
+            if (other.token != null) {
                 return false;
-        } else if (!token.equals(other.token))
+            }
+        } else if (!token.equals(other.token)) {
             return false;
+        }
         if (serviceId == null) {
-            if (other.serviceId != null)
+            if (other.serviceId != null) {
                 return false;
-        } else if (!serviceId.equals(other.serviceId))
+            }
+        } else if (!serviceId.equals(other.serviceId)) {
             return false;
+        }
         if (action == null) {
-            if (other.action != null)
+            if (other.action != null) {
                 return false;
-        } else if (!action.equals(other.action))
+            }
+        } else if (!action.equals(other.action)) {
             return false;
+        }
         if (startInvoke == null) {
-            if (other.startInvoke != null)
+            if (other.startInvoke != null) {
                 return false;
-        } else if (!startInvoke.equals(other.startInvoke))
+            }
+        } else if (!startInvoke.equals(other.startInvoke)) {
             return false;
+        }
         if (endInvoke == null) {
-            if (other.endInvoke != null)
+            if (other.endInvoke != null) {
                 return false;
-        } else if (!endInvoke.equals(other.endInvoke))
+            }
+        } else if (!endInvoke.equals(other.endInvoke)) {
             return false;
+        }
         if (errorStackTrace == null) {
-            if (other.errorStackTrace != null)
+            if (other.errorStackTrace != null) {
                 return false;
-        } else if (!errorStackTrace.equals(other.errorStackTrace))
+            }
+        } else if (!errorStackTrace.equals(other.errorStackTrace)) {
             return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((token == null) ? 0 : token.hashCode());
-        result = prime * result + ((serviceId == null) ? 0 : serviceId.hashCode());
-        result = prime * result + ((action == null) ? 0 : action.hashCode());
-        result = prime * result + ((startInvoke == null) ? 0 : startInvoke.hashCode());
-        result = prime * result + ((endInvoke == null) ? 0 : endInvoke.hashCode());
-        result = prime * result + ((errorStackTrace == null) ? 0 : errorStackTrace.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + ((token == null) ? 0 : token.hashCode());
+        result = 31 * result + ((serviceId == null) ? 0 : serviceId.hashCode());
+        result = 31 * result + ((action == null) ? 0 : action.hashCode());
+        result = 31 * result + ((startInvoke == null) ? 0 : startInvoke.hashCode());
+        result = 31 * result + ((endInvoke == null) ? 0 : endInvoke.hashCode());
+        result = 31 * result + ((errorStackTrace == null) ? 0 : errorStackTrace.hashCode());
         return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("RoutLogEntity (");
-
-        sb.append(id);
-        sb.append(", ").append(token);
-        sb.append(", ").append(serviceId);
-        sb.append(", ").append(action);
-        sb.append(", ").append(startInvoke);
-        sb.append(", ").append(endInvoke);
-        sb.append(", ").append(errorStackTrace);
-
-        sb.append(")");
-        return sb.toString();
     }
 }

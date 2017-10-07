@@ -4,6 +4,8 @@
 package com.zemrow.test.dsl.jooq.autogen.auth.dao.entity;
 
 
+import com.zemrow.test.dsl.jooq.impl.AbstractEntity;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -11,23 +13,36 @@ import java.util.UUID;
 /**
  * Сессия пользователя
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes"})
-public class AuthSessionEntity implements Serializable {
+public class AuthSessionEntity extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 1440107140;
+    private static final long serialVersionUID = -1960148670;
 
-    private UUID id;
+    /**
+     * Точка входа пользователя
+     */
     private UUID authEntryPointId;
+    /**
+     * Уникальный идентификатор сессии, сложный для подбора
+     */
     private String token;
+    /**
+     * Дата создания записи
+     */
     private Long createTime;
+    /**
+     * Дата удаления записи
+     */
     private Long deleteTime;
+    /**
+     * Пользователь удаливший запись
+     */
     private UUID deletedBy;
 
     public AuthSessionEntity() {
     }
 
     public AuthSessionEntity(AuthSessionEntity value) {
-        this.id = value.id;
+        super(value);
         this.authEntryPointId = value.authEntryPointId;
         this.token = value.token;
         this.createTime = value.createTime;
@@ -43,20 +58,12 @@ public class AuthSessionEntity implements Serializable {
             Long deleteTime,
             UUID deletedBy
     ) {
-        this.id = id;
+        super(id);
         this.authEntryPointId = authEntryPointId;
         this.token = token;
         this.createTime = createTime;
         this.deleteTime = deleteTime;
         this.deletedBy = deletedBy;
-    }
-
-    public UUID getId() {
-        return this.id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public UUID getAuthEntryPointId() {
@@ -100,72 +107,75 @@ public class AuthSessionEntity implements Serializable {
     }
 
     @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AuthSessionEntity (");
+
+        sb.append("id:").append(id);
+        sb.append(", authEntryPointId:").append(authEntryPointId);
+        sb.append(", token:").append(token);
+        sb.append(", createTime:").append(createTime);
+        sb.append(", deleteTime:").append(deleteTime);
+        sb.append(", deletedBy:").append(deletedBy);
+
+        sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (!(obj instanceof AuthSessionEntity)) {
             return false;
+        }
         final AuthSessionEntity other = (AuthSessionEntity) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
         if (authEntryPointId == null) {
-            if (other.authEntryPointId != null)
+            if (other.authEntryPointId != null) {
                 return false;
-        } else if (!authEntryPointId.equals(other.authEntryPointId))
+            }
+        } else if (!authEntryPointId.equals(other.authEntryPointId)) {
             return false;
+        }
         if (token == null) {
-            if (other.token != null)
+            if (other.token != null) {
                 return false;
-        } else if (!token.equals(other.token))
+            }
+        } else if (!token.equals(other.token)) {
             return false;
+        }
         if (createTime == null) {
-            if (other.createTime != null)
+            if (other.createTime != null) {
                 return false;
-        } else if (!createTime.equals(other.createTime))
+            }
+        } else if (!createTime.equals(other.createTime)) {
             return false;
+        }
         if (deleteTime == null) {
-            if (other.deleteTime != null)
+            if (other.deleteTime != null) {
                 return false;
-        } else if (!deleteTime.equals(other.deleteTime))
+            }
+        } else if (!deleteTime.equals(other.deleteTime)) {
             return false;
+        }
         if (deletedBy == null) {
-            if (other.deletedBy != null)
+            if (other.deletedBy != null) {
                 return false;
-        } else if (!deletedBy.equals(other.deletedBy))
+            }
+        } else if (!deletedBy.equals(other.deletedBy)) {
             return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((authEntryPointId == null) ? 0 : authEntryPointId.hashCode());
-        result = prime * result + ((token == null) ? 0 : token.hashCode());
-        result = prime * result + ((createTime == null) ? 0 : createTime.hashCode());
-        result = prime * result + ((deleteTime == null) ? 0 : deleteTime.hashCode());
-        result = prime * result + ((deletedBy == null) ? 0 : deletedBy.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + ((authEntryPointId == null) ? 0 : authEntryPointId.hashCode());
+        result = 31 * result + ((token == null) ? 0 : token.hashCode());
+        result = 31 * result + ((createTime == null) ? 0 : createTime.hashCode());
+        result = 31 * result + ((deleteTime == null) ? 0 : deleteTime.hashCode());
+        result = 31 * result + ((deletedBy == null) ? 0 : deletedBy.hashCode());
         return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("AuthSessionEntity (");
-
-        sb.append(id);
-        sb.append(", ").append(authEntryPointId);
-        sb.append(", ").append(token);
-        sb.append(", ").append(createTime);
-        sb.append(", ").append(deleteTime);
-        sb.append(", ").append(deletedBy);
-
-        sb.append(")");
-        return sb.toString();
     }
 }
